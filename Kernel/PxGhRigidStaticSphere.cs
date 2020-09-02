@@ -1,0 +1,29 @@
+﻿using System.Collections.Generic;
+using Grasshopper.Kernel.Types;
+using Rhino.Geometry;
+using PhysX;
+
+namespace AIM.Simulation.Kernel
+{
+    public class PxGhRigidStaticSphere : PxGhRigidStatic
+    {
+        public PxGhRigidStaticSphere(Plane frame, float radius, Material material)
+        {
+            Actor.CreateShape(new SphereGeometry(radius), material);
+            Actor.GlobalPose = frame.ToMatrix();
+            DisplayMeshes.Add(Mesh.CreateFromSphere(new Sphere(frame, radius), 32, 16));
+        }
+
+
+        public override void GetDisplayGhMeshes(List<GH_Mesh> ghMeshes)
+        {
+            ghMeshes.Add(new GH_Mesh(DisplayMeshes[0]));
+        }
+
+
+        public override void GetDisplayMeshes(List<Mesh> meshes)
+        {
+            meshes.Add(DisplayMeshes[0]);
+        }
+    }
+}
